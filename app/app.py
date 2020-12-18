@@ -1,9 +1,10 @@
 from typing import List, Dict
 import mysql.connector
 import simplejson as json
+import requests
 import configparser
 from flask import Flask, Response
-from flask import render_template
+from flask import render_template, request
 
 app = Flask(__name__)
 
@@ -51,13 +52,13 @@ def render_results():
     city_name = request.form['CityName']
 
     api_key = get_api_key()
-    data = get_weather_results(zip_code, api_key)
+    data = get_weather_results(city_name, api_key)
     temp = "{0:.2f}".format(data["main"]["temp"])
     feels_like = "{0:.2f}".format(data["main"]["feels_like"])
     weather = data["weather"][0]["main"]
     location = data["name"]
 
-    return render_template('results.html',
+    return render_template('#',
                            location=location, temp=temp,
                            feels_like=feels_like, weather=weather)
 
@@ -67,11 +68,10 @@ def get_api_key():
     return config['openweathermap']['api']
 
 def get_weather_results(city_name, api_key):
-    api_url = "http://api.openweathermap.org/" \
-              "data/2.5/weather?q=".format(city_name, api_key)
-
-    r = requests.get(api_url)
-    return r.json()
+   api_url = "http://api_url = api.openweathermap.org/" \
+             "data/2.5/weather?q={}&units=imperial&appid={}.format(city_name, api_key)
+   r = requests.get(api_url)
+   return r.json()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
